@@ -5,15 +5,15 @@ const n_pieces_in_chunk = 16;
 const n_bits_in_piece = 32;
 
 /// Checks if a unicode code point is the valid identifier start
-pub fn canStartId(ch: u32) bool {
+pub export fn canStartId(ch: u32) bool {
     if (ch < 128) {
         return (ch >= 'a' and ch <= 'z') or
-            (ch >= 'A' and ch <= 'Z') or ch == '$' or ch == '_';
+            (ch >= 'A' and ch <= 'Z') or ch == '_';
     }
 
     const chunk_number = ch / 512;
     // offset of the first u32 in the chunk in the leaf table.
-    const chunk_offset = table.is_id_start_root[chunk_number];
+    const chunk_offset = @as(u32, table.is_id_start_root[chunk_number]) * 16;
 
     // now codepoint is between [0, 512).
     const c = ch - (chunk_number * 512);
@@ -42,7 +42,7 @@ pub fn canContinueId(ch: u32) bool {
 
     const chunk_number = ch / 512;
     // offset of the first u32 in the chunk in the leaf table.
-    const chunk_offset = table.is_id_continue_root[chunk_number];
+    const chunk_offset = @as(u32, table.is_id_continue_root[chunk_number]) * 16;
 
     // now codepoint is between [0, 512).
     const c = ch - (chunk_number * 512);
@@ -69,7 +69,7 @@ test {
     defer id_contts.deinit();
 
     for (0..std.math.maxInt(u21)) |ch| {
-        const expected = id_starts.contains(@intCast(ch)) or ch == '_' or ch == '$';
+        const expected = id_starts.contains(@intCast(ch)) or ch == '_';
         if (t.expectEqual(expected, canStartId(@intCast(ch)))) {} else |err| {
             std.debug.print("ID Start failed for codepoint:  ({d})\n", .{ch});
             return err;

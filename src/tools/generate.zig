@@ -201,7 +201,7 @@ fn toTrie(allocator: std.mem.Allocator, set: *const U32Set) !struct { []u32, []u
         const gop = try leaf_offset_of_chunk.getOrPut(chunk);
         if (!gop.found_existing) {
             // each chunk is 16 pieces.
-            gop.value_ptr.* = (leaf_offset_of_chunk.count() - 1) * 16;
+            gop.value_ptr.* = (leaf_offset_of_chunk.count() - 1);
         }
     }
 
@@ -233,7 +233,7 @@ fn writeTrie(
 ) !void {
     _ = try f.write("\npub const ");
     _ = try f.write(name);
-    _ = try f.write("_root = [_]u32 {");
+    _ = try f.write("_root = [_]u8 {");
 
     const root, const leaf = try toTrie(allocator, codepoint_set);
     defer allocator.free(root);
