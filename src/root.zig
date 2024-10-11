@@ -76,6 +76,12 @@ test {
         }
     }
 
+    const codepoint_slice = "_‍";
+    const utf8view = try std.unicode.Utf8View.init(codepoint_slice);
+    var iter = utf8view.iterator();
+    try t.expect(canStartId(iter.nextCodepoint() orelse unreachable));
+    try t.expect(canContinueId(iter.nextCodepoint() orelse unreachable));
+
     for (0..std.math.maxInt(u21)) |ch| {
         const expected = id_contts.contains(@intCast(ch));
         if (t.expectEqual(expected, canContinueId(@intCast(ch)))) {} else |err| {

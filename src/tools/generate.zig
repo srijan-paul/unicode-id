@@ -35,7 +35,7 @@ fn downloadUnicodeSpec(allocator: std.mem.Allocator, dst_path: []const u8) !void
     var client = std.http.Client{ .allocator = allocator };
     defer client.deinit();
 
-    const uri = try std.Uri.parse("https://www.unicode.org/Public/zipped/5.0.0/UCD.zip");
+    const uri = try std.Uri.parse("https://www.unicode.org/Public/zipped/15.1.0/UCD.zip");
 
     var hd_buf: [1024]u8 = undefined;
     var req = try std.http.Client.open(&client, .GET, uri, .{
@@ -345,7 +345,8 @@ pub fn main() !void {
     if (!exists(extracted_path)) {
         const zip_path = "/tmp/ucd.zip";
         try downloadUnicodeSpec(allocator, zip_path);
-        _ = try unzipUcd(allocator, zip_path);
+        const s = try unzipUcd(allocator, zip_path);
+        defer allocator.free(s);
     }
 
     const derived_properties_filepath = try std.fs.path.join(
