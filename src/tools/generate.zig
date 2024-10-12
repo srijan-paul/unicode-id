@@ -35,7 +35,7 @@ fn downloadUnicodeSpec(allocator: std.mem.Allocator, dst_path: []const u8) !void
     var client = std.http.Client{ .allocator = allocator };
     defer client.deinit();
 
-    const uri = try std.Uri.parse("https://www.unicode.org/Public/zipped/15.1.0/UCD.zip");
+    const uri = try std.Uri.parse("https://www.unicode.org/Public/zipped/16.0.0/UCD.zip");
 
     var hd_buf: [1024]u8 = undefined;
     var req = try std.http.Client.open(&client, .GET, uri, .{
@@ -292,6 +292,8 @@ fn writeFile(allocator: std.mem.Allocator, id_starts: *const U32Set, id_contt: *
 
     try writeTrie(allocator, id_starts, f, "is_id_start");
     try writeTrie(allocator, id_contt, f, "is_id_continue");
+
+    std.log.info("Wrote tries to table.zig", .{});
 }
 
 fn readAndParseFile(allocator: std.mem.Allocator, filepath: []const u8) !struct { U32Set, U32Set } {
