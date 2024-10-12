@@ -3,6 +3,8 @@
 A Zig library to detect unicode ID_Start and ID_Continue attributes on UTF-8 codepoints.
 Implements [Unicode standard annex #31](https://www.unicode.org/reports/tr31/).
 
+Used in the [Kiesel JavaScript engine](https://kiesel.dev).
+
 ## Motivation
 
 Programming language parsers need to validate identifier tokens (e.g: variable names).
