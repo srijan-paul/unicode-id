@@ -1,9 +1,12 @@
 # Unicode ID
 
-A Zig library to detect unicode ID_Start and ID_Continue attributes on UTF-8 codepoints.
+A Zig library that detects unicode ID_Start and ID_Continue attributes on UTF-8 codepoints.
 Implements [Unicode standard annex #31](https://www.unicode.org/reports/tr31/).
 
-Used in the [Kiesel JavaScript engine](https://kiesel.dev).
+Used by the [Kiesel JavaScript engine](https://kiesel.dev).
+
+Performs 2-3x faster than rust's [unicode-xid](https://github.com/unicode-rs/unicode-xid) crate,
+averaging to 27ns per codepoint on an 3.2GHz 8-core M1.
 
 ## Motivation
 
@@ -85,3 +88,9 @@ To run the tests:
 ```sh
 zig test src/root.zig
 ```
+
+## See also
+
+- [unicode-ident](https://github.com/dtolnay/unicode-ident) (The crate that inspired this design).
+- [unicode-xid](https://github.com/unicode-rs/unicode-xid)
+

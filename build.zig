@@ -29,4 +29,16 @@ pub fn build(b: *std.Build) void {
 
     const test_step = b.step("test", "Run unit tests");
     test_step.dependOn(&run_lib_unit_tests.step);
+
+    const benchmark = b.addExecutable(.{
+        .name = "benchmark",
+        .root_source_file = b.path("src/benchmark.zig"),
+        .target = b.host,
+        .optimize = b.standardOptimizeOption(.{
+            .preferred_optimize_mode = std.builtin.OptimizeMode.ReleaseFast,
+        }),
+    });
+    const run_benchmark = b.addRunArtifact(benchmark);
+    const bench_step = b.step("bench", "Run benchmark");
+    bench_step.dependOn(&run_benchmark.step);
 }
